@@ -18,4 +18,12 @@ describe Video do
     video.save
     expect(Video.first.category.name).to eq("drama")
   end
+  it "validates presence of title" do
+    video = Video.create(description: "description without a title video")
+    expect(Video.count).to eq(0)
+  end
+  it "validates presence of description" do
+    video = Video.create(title: "Death on the nile")
+    expect(Video.count).to eq(0)
+  end
 end
