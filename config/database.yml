@@ -13,3 +13,4 @@ test:
   pool: 5
   username: boottest
   password: Iputo*34
+# to be included in gitignore
