@@ -5,6 +5,6 @@ class Video < ActiveRecord::Base
 
   def self.search_by_title(string)
     return [] if string.empty?
-    where("title LIKE ?", "%#{string}%").order(created_at: :asc)
+    where("lower(title) LIKE ?", "%#{string.downcase}%").order(created_at: :asc)
   end
 end
