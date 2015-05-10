@@ -4,7 +4,7 @@ Myflix::Application.routes.draw do
   get '/register', to: "users#new", as: "register"
   get '/sign_in', to: "sessions#new", as: "sign_in"
   post '/login', to: "sessions#create"
-  get '/sign_out', to: "sessions#destroy"
+  delete '/sign_out', to: "sessions#destroy"
   resources :users, only: [:create]
   resources :videos do
     collection do

@@ -1,8 +1,10 @@
 class UsersController < ApplicationController
+  
   def new
     redirect_to home_path unless !logged_in?
     @user = User.new
   end
+  
   def create
     @user = User.new(user_params)
 
