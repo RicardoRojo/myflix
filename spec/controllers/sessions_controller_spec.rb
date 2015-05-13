@@ -1,12 +1,11 @@
 require 'spec_helper'
 
 describe SessionsController do
-  
-  let(:user) {Fabricate(:user)}
 
   describe "GET new" do
 
     it "redirects to home page if logged in" do
+      user = Fabricate(:user)
       session[:user_id] = user.id
       get :new
       expect(response).to redirect_to home_path
@@ -16,6 +15,8 @@ describe SessionsController do
   describe "POST create" do
 
     context "with valid credentials" do
+
+      let(:user) {Fabricate(:user)}
 
       before do
         post :create, email: user.email, password: user.password
@@ -37,6 +38,8 @@ describe SessionsController do
 
     context "with invalid credentials" do
 
+      let(:user) {Fabricate(:user)}
+
       before do
         post :create, email: user.email, password: "fake password"
       end
@@ -56,13 +59,15 @@ describe SessionsController do
     end
   end
 
-  describe "GET destroy" do
+  describe "DELETE destroy" do
 
     context "with user logged in" do
 
+      let(:user) {Fabricate(:user)}
+
       before do
         session[:user_id] = user.id
-        get :destroy
+        delete :destroy
       end
 
       it "destroys session" do
@@ -77,7 +82,7 @@ describe SessionsController do
     context "with user not logged in" do
       it "redirects to root path" do
         session[:user_id] = nil
-        get :destroy
+        delete :destroy
         expect(response).to redirect_to root_path
       end
     end

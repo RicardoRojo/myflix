@@ -4,17 +4,15 @@ describe UsersController do
 
   describe "GET new" do
 
-    before do
+    it "redirects to home if logged in" do
       user = Fabricate(:user)
       session[:user_id] = user.id
       get :new
-    end
-
-    it "redirects to home if logged in" do
       expect(response).to redirect_to home_path
     end
     
     it "assigns a new variable to user and is an instance of user" do
+      get :new
       expect(assigns(:user)).to be_new_record
       expect(assigns(:user)).to be_instance_of(User)
     end
