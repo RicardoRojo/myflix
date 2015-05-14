@@ -39,9 +39,30 @@ describe Video do
   end
 
   describe "#average_rating" do
+
     it "returns 0 if no reviews" do
       video = Fabricate(:video)
-      expect(Video.average_rating).to eq(0)
+      expect(video.average_rating).to eq(0)
+    end
+
+    it "returns the review rating value if 1 review" do
+      video = Fabricate(:video)
+      review = Fabricate(:review, video: video)
+      expect(video.average_rating).to eq(video.reviews.first.rating)
+    end
+
+    it "returns the average rating of the reviews if more than one reviews" do
+      video = Fabricate(:video)
+      review = Fabricate(:review, video: video, rating: 3)
+      review2 = Fabricate(:review, video: video, rating: 5)
+      expect(video.average_rating).to eq(4)
+    end
+
+    it "returns the value of the review with one decimal if value is not integer" do
+      video = Fabricate(:video)
+      review = Fabricate(:review, video: video, rating: 3)
+      review2 = Fabricate(:review, video: video, rating: 4)
+      expect(video.average_rating).to eq(3.5)
     end
   end
 end
