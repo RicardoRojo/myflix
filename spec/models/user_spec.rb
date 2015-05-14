@@ -24,5 +24,4 @@ describe User do
     is_at_least(5).
     on(:create)
   end
-
 end

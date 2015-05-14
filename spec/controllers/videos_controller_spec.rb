@@ -3,6 +3,7 @@ require 'spec_helper'
 describe VideosController do
 
   describe "GET show" do
+
     context "authenticated user" do
       before do
         session[:user_id] = Fabricate(:user).id
@@ -13,6 +14,14 @@ describe VideosController do
         my_video = Fabricate(:video)
         get :show, id: my_video.id
         expect(assigns(:video)).to eq(my_video)
+      end
+
+      it "sets @reviews" do
+        my_video = Fabricate(:video)
+        review1 = Fabricate(:review, video: my_video)
+        review2 = Fabricate(:review, video: my_video)
+        get :show, id: my_video.id
+        expect(assigns(:reviews)).to match_array([review1, review2])
       end
     end
 

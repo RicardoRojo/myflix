@@ -5,7 +5,7 @@ describe Video do
   it { should validate_presence_of(:description) }
   it { should belong_to(:category) }
 
-  describe "#search_by_title" do
+  describe ".search_by_title" do
 
     it "should return an empty array if the search is an empty string" do
       star_trek = Video.create(title: "star trek", description: "Live long and prosper")
@@ -35,6 +35,13 @@ describe Video do
       star_trek = Video.create(title: "star trek", description: "Live long and prosper")
       stargate = Video.create(title: "stargate", description: "Travel to the stars", created_at: 1.day.ago)
       expect(Video.search_by_title("star")).to eq([stargate,star_trek])
+    end
+  end
+
+  describe "#average_rating" do
+    it "returns 0 if no reviews" do
+      video = Fabricate(:video)
+      expect(Video.average_rating).to eq(0)
     end
   end
 end
