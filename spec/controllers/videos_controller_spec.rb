@@ -23,6 +23,7 @@ describe VideosController do
         get :show, id: my_video.id
         expect(assigns(:reviews)).to match_array([review1, review2])
       end
+
     end
 
     context "unauthenticated user" do
@@ -31,6 +32,7 @@ describe VideosController do
         get :show, id: 1
         expect(response).to redirect_to root_path
       end
+
     end
   end
 
