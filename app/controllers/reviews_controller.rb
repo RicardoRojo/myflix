@@ -8,7 +8,6 @@ class ReviewsController < ApplicationController
     else
       @reviews = @video.reviews.reload
       render "videos/show"
-    
     end
   end
 

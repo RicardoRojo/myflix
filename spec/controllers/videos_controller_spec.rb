@@ -3,7 +3,6 @@ require 'spec_helper'
 describe VideosController do
 
   describe "GET show" do
-
     context "authenticated user" do
       before do
         session[:user_id] = Fabricate(:user).id
@@ -37,7 +36,6 @@ describe VideosController do
   end
 
   describe "GET search" do
-
     context "authenticated user" do 
       before do
         session[:user_id] = Fabricate(:user).id
@@ -53,7 +51,6 @@ describe VideosController do
     end
 
     context "unauthenticated user" do
-
       it "redirects to sign_in path" do
         get :search, video_title: "test"
         expect(response).to redirect_to sign_in_path

@@ -8,8 +8,4 @@ class Video < ActiveRecord::Base
     return [] if string.empty?
     where("lower(title) LIKE ?", "%#{string.downcase}%").order(created_at: :asc)
   end
-  
-  def average_rating
-    reviews.count == 0 ? 0 : (reviews.sum(:rating).to_f/reviews.count.to_f).round(1)
-  end
 end

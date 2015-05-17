@@ -6,7 +6,7 @@
       .video_info.col-sm-3
         %header
           %h3= @video.title
-          %span Rating: #{@video.average_rating}/5.0
+          %span Rating: #{@video.reviews.average(:rating).to_f.round(1)}/5.0
         %p= @video.description
         .actions
           %a.btn.btn-primary(href="") Watch Now
@@ -20,7 +20,7 @@
             %label Rate this video
             .row
               .col-sm-3
-                = f.select :rating, options_for_select([5,4,3,2,1].map {|rating| [rating.to_s + " Star".pluralize(rating), rating]},["5 Stars", 5])
+                = f.select :rating, options_for_select([5,4,3,2,1].map {|rating| [pluralize(rating," Star"), rating]},["5 Stars", 5])
           .form-group
             %label Write Review
             .row

@@ -6,63 +6,27 @@ describe Video do
   it { should belong_to(:category) }
 
   describe ".search_by_title" do
+    let(:star_trek) {Fabricate(:video, title: "star trek")}
+    let(:stargate) {Fabricate(:video, title: "stargate",created_at: 1.day.ago)}
 
-    it "should return an empty array if the search is an empty string" do
-      star_trek = Video.create(title: "star trek", description: "Live long and prosper")
-      stargate = Video.create(title: "stargate", description: "Travel to the stars")
+    it "returns an empty array if the search is an empty string" do
       expect(Video.search_by_title("")).to eq([])
     end
 
-    it "should return an empty array if no records found" do
-      star_trek = Video.create(title: "star trek", description: "Live long and prosper")
-      stargate = Video.create(title: "stargate", description: "Travel to the stars")
+    it "returns an empty array if no records found" do
       expect(Video.search_by_title("matrix")).to eq([])
     end
 
-    it "should return an array of one element if the query returns one and only one result" do
-      star_trek = Video.create(title: "star trek", description: "Live long and prosper")
-      stargate = Video.create(title: "stargate", description: "Travel to the stars")
+    it "returns an array of one element if the query returns one and only one result" do
       expect(Video.search_by_title("stargate")).to eq([stargate])
     end
 
-    it "should return an array of coincident records if no exact match" do
-      star_trek = Video.create(title: "star trek", description: "Live long and prosper")
-      stargate = Video.create(title: "stargate", description: "Travel to the stars")
-      expect(Video.search_by_title("star")).to eq([star_trek, stargate])
+    it "returns an array of coincident records if no exact match" do
+      expect(Video.search_by_title("star")).to match_array([star_trek, stargate])
     end
     
-    it "should return an array of records ordered by created_at if multiple records are found " do
-      star_trek = Video.create(title: "star trek", description: "Live long and prosper")
-      stargate = Video.create(title: "stargate", description: "Travel to the stars", created_at: 1.day.ago)
+    it "returns an array of records ordered by created_at if multiple records are found " do
       expect(Video.search_by_title("star")).to eq([stargate,star_trek])
-    end
-  end
-
-  describe "#average_rating" do
-
-    it "returns 0 if no reviews" do
-      video = Fabricate(:video)
-      expect(video.average_rating).to eq(0)
-    end
-
-    it "returns the review rating value if 1 review" do
-      video = Fabricate(:video)
-      review = Fabricate(:review, video: video)
-      expect(video.average_rating).to eq(video.reviews.first.rating)
-    end
-
-    it "returns the average rating of the reviews if more than one reviews" do
-      video = Fabricate(:video)
-      review = Fabricate(:review, video: video, rating: 3)
-      review2 = Fabricate(:review, video: video, rating: 5)
-      expect(video.average_rating).to eq(4)
-    end
-
-    it "returns the value of the review with one decimal if value is not integer" do
-      video = Fabricate(:video)
-      review = Fabricate(:review, video: video, rating: 3)
-      review2 = Fabricate(:review, video: video, rating: 4)
-      expect(video.average_rating).to eq(3.5)
     end
   end
 end
