@@ -17,4 +17,11 @@ class ApplicationController < ActionController::Base
       redirect_to root_path
     end
   end
+
+  def redirect_to_sign_in
+    if !logged_in?
+      flash[:danger] = "You need to be signed in to do that"
+      redirect_to sign_in_path
+    end
+  end
 end
