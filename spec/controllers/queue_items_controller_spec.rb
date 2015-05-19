@@ -28,7 +28,7 @@ describe QueueItemsController do
 
       let(:user) {Fabricate(:user)}
       let(:monk) {Fabricate(:video, title: "Monk")}
-      
+
       before do
         session[:user_id] = user.id
       end
@@ -63,6 +63,42 @@ describe QueueItemsController do
       it "redirects to the root page" do
         video = Fabricate(:video)
         post :create, video_id: video.id
+        expect(response).to redirect_to root_path
+      end
+    end
+  end
+
+  describe "DELETE destroy" do
+    context "with user logged in" do
+
+      let(:user) {Fabricate(:user)}
+      before {session[:user_id] = user.id}
+
+      it "redirects to my queue path" do
+        queue_item = Fabricate(:queue_item)
+        delete :destroy, id: queue_item.id
+        expect(response).to redirect_to my_queue_path
+      end
+
+      it "deletes de queued item from the list" do
+        queue_item = Fabricate(:queue_item, user: user)
+        delete :destroy, id: queue_item.id
+        expect(QueueItem.count).to eq(0)
+      end
+
+      it "does not delete the item if is not in the user queue" do
+        alice = Fabricate(:user)
+        queue_item = Fabricate(:queue_item, user: alice)
+        delete :destroy, id: queue_item.id
+        expect(QueueItem.count).to eq(1)
+      end
+    end
+
+    context "with no user logged in" do
+      
+      it "redirects to the root path" do
+        queue_item = Fabricate(:queue_item)
+        delete :destroy, id: queue_item.id
         expect(response).to redirect_to root_path
       end
     end

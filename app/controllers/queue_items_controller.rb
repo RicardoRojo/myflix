@@ -12,6 +12,12 @@ class QueueItemsController < ApplicationController
     redirect_to my_queue_path
   end
 
+  def destroy
+    queue_item = QueueItem.find(params[:id])
+    remove_item_from_queue(queue_item)
+    redirect_to my_queue_path
+  end
+
   private
 
   def add_item_to_queue(video)
@@ -20,5 +26,9 @@ class QueueItemsController < ApplicationController
 
   def item_is_already_queued?(video)
     !!QueueItem.where("video_id = ? and user_id = ?", params[:video_id], current_user.id).first
+  end
+
+  def remove_item_from_queue(queue_item)
+    queue_item.destroy if current_user.queue_items.include?(queue_item)
   end
 end
