@@ -4,7 +4,7 @@ describe Video do
   it { should validate_presence_of(:title) }
   it { should validate_presence_of(:description) }
   it { should belong_to(:category) }
-  it { should have_many(:queue_items)}
+  it { should have_many(:queue_items) }
 
   describe ".search_by_title" do
     let(:star_trek) {Fabricate(:video, title: "star trek")}
