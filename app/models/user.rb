@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   has_many :videos
-  has_many :queue_items
+  has_many :queue_items, -> {order "position ASC"}
   has_secure_password validations: false
   validates :full_name, presence: true
   validates :email, presence: true, email: true, uniqueness: true
