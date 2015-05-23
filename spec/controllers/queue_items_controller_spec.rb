@@ -90,6 +90,13 @@ describe QueueItemsController do
         delete :destroy, id: queue_item.id
         expect(QueueItem.count).to eq(1)
       end
+
+      it "normalizes the queue of the user" do
+        queue_item = Fabricate(:queue_item, user: user, position: 1)
+        queue_item2 = Fabricate(:queue_item, user: user, position: 2)
+        delete :destroy, id: queue_item.id
+        expect(queue_item2.reload.position).to eq(1)
+      end
     end
 
     context "with no user logged in" do
@@ -146,8 +153,8 @@ describe QueueItemsController do
         end
 
         it "does not update the data" do
-          queue_item = Fabricate(:queue_item, user:alice, position: 1)
-          queue_item2 = Fabricate(:queue_item, user:alice, position: 2)
+          queue_item = Fabricate(:queue_item, user: alice, position: 1)
+          queue_item2 = Fabricate(:queue_item, user: alice, position: 2)
           post :update_queue, queue_items: [{id: queue_item.id, position: 3} , {id: queue_item.id, position: 2.4}]
           expect(queue_item.reload.position).to eq(1)
         end

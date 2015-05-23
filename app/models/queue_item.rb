@@ -16,4 +16,14 @@ class QueueItem < ActiveRecord::Base
     reviews.first.rating if reviews.first
   end
 
+  def rating=(new_rating)
+    review = reviews.find_by(user: user)
+    if review
+      review.update_attribute(:rating, new_rating)
+    else
+      review = Review.new(user: user, video: video, rating: new_rating)
+      review.save(validate: false)
+    end
+  end
+
 end
