@@ -6,10 +6,10 @@ describe QueueItemsController do
       it "has a @queueitems variable" do
         current_user = Fabricate(:user)
         session[:user_id] = current_user.id
-        queueitem = Fabricate(:queue_item, user: current_user)
-        queueitem2 = Fabricate(:queue_item, user: current_user)
+        queue_item = Fabricate(:queue_item, user: current_user)
+        queue_item2 = Fabricate(:queue_item, user: current_user)
         get :index
-        expect(assigns(:queue_items)).to match_array([queueitem,queueitem2])
+        expect(assigns(:queue_items)).to match_array([queue_item,queue_item2])
       end
     end
 

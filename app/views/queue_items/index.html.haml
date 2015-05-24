@@ -4,7 +4,7 @@
       %article
         %header
           %h2 My Queue
-        = bootstrap_form_tag url: "/update_queue" do 
+        = bootstrap_form_tag url: update_queue_path do 
           %table.table
             %thead
               %tr
@@ -25,7 +25,7 @@
                   %td
                     = button_to "Play", nil, class: "btn btn-default"
                   %td
-                    = select_tag "queue_items[][rating]", options_for_select([5,4,3,2,1].map {|value| ["#{value} Stars", value]},queue_item.rating), include_blank: true,  class: "form-control"
+                    = select_tag "queue_items[][rating]", options_for_select_with_stars(queue_item.rating), include_blank: true,  class: "form-control"
                   %td
                     = link_to queue_item.category_name, queue_item.category
                   %td
