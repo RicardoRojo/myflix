@@ -15,6 +15,17 @@ class QueueItemsController < ApplicationController
   def destroy
     queue_item = QueueItem.find(params[:id])
     remove_item_from_queue(queue_item)
+    current_user.normalize_queue_item_list
+    redirect_to my_queue_path
+  end
+
+  def update_queue
+    begin
+      update_item_array(params[:queue_items])
+      current_user.normalize_queue_item_list
+    rescue ActiveRecord::RecordInvalid
+      flash[:error] = "Invalid data. Try again"
+    end
     redirect_to my_queue_path
   end
 
@@ -30,5 +41,18 @@ class QueueItemsController < ApplicationController
 
   def remove_item_from_queue(queue_item)
     queue_item.destroy if current_user.queue_items.include?(queue_item)
+  end
+
+  def update_item_array(items_array)
+      ActiveRecord::Base.transaction do
+        items_array.each do |item|
+          update_item(item)
+        end
+      end
+  end
+
+  def update_item(item)
+    queue_item = QueueItem.find(item["id"])
+    queue_item.update_attributes!(position: item["position"], rating: item["rating"]) if queue_item.user == current_user
   end
 end

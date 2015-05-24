@@ -46,4 +46,32 @@ describe QueueItem do
       expect(queue_item.category).to eq(category)
     end
   end
+
+  describe "#rating=" do
+    it "returns the new rating if the rating changes" do
+      alice = Fabricate(:user)
+      video = Fabricate(:video)
+      review = Fabricate(:review, user: alice, video: video, rating: 1)
+      queue_item = Fabricate(:queue_item, user: alice, video: video)
+      queue_item.rating = 3
+      expect(queue_item.rating).to eq(3)
+    end
+
+    it "creates a new rating if rating was not set" do
+      alice = Fabricate(:user)
+      video = Fabricate(:video)
+      queue_item = Fabricate(:queue_item, user: alice, video: video)
+      queue_item.rating = 3
+      expect(queue_item.rating).to eq(3)
+    end
+
+    it "deletes the old rating if the rating is set to nil" do
+      alice = Fabricate(:user)
+      video = Fabricate(:video)
+      review = Fabricate(:review, user: alice, video: video, rating: 1)
+      queue_item = Fabricate(:queue_item, user: alice, video: video)
+      queue_item.rating = nil
+      expect(Review.first.rating).to be_nil
+    end
+  end
 end
