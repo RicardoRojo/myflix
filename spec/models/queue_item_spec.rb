@@ -3,6 +3,7 @@ require 'spec_helper'
 describe QueueItem do
   it {should belong_to(:user)}
   it {should belong_to(:video)}
+  it {should validate_numericality_of(:position).only_integer}
 
   describe "#video_title" do
     it "shows the title of the video" do
@@ -22,17 +23,17 @@ describe QueueItem do
   end
 
   describe "#rating" do
+
+    let(:alice) {Fabricate(:user)}
+    let(:video) {Fabricate(:video)}
+
     it "shows nil value if no rating is set" do
-      user = Fabricate(:user)
-      video = Fabricate(:video)
-      queue_item = Fabricate(:queue_item, user: user, video: video)
+      queue_item = Fabricate(:queue_item, user: alice, video: video)
       expect(queue_item.rating).to be(nil)
     end
 
     it "shows review rating for the video if is set" do
-      user = Fabricate(:user)
-      video = Fabricate(:video)
-      review = Fabricate(:review, video: video, user: user)
+      review = Fabricate(:review, video: video, user: alice)
       queue_item = Fabricate(:queue_item, video: video)
       expect(queue_item.rating).to eq(review.rating)
     end
@@ -48,9 +49,11 @@ describe QueueItem do
   end
 
   describe "#rating=" do
+
+    let(:alice) { Fabricate(:user)}
+    let(:video) { Fabricate(:video)}
+
     it "returns the new rating if the rating changes" do
-      alice = Fabricate(:user)
-      video = Fabricate(:video)
       review = Fabricate(:review, user: alice, video: video, rating: 1)
       queue_item = Fabricate(:queue_item, user: alice, video: video)
       queue_item.rating = 3
@@ -58,16 +61,12 @@ describe QueueItem do
     end
 
     it "creates a new rating if rating was not set" do
-      alice = Fabricate(:user)
-      video = Fabricate(:video)
       queue_item = Fabricate(:queue_item, user: alice, video: video)
       queue_item.rating = 3
       expect(queue_item.rating).to eq(3)
     end
 
     it "deletes the old rating if the rating is set to nil" do
-      alice = Fabricate(:user)
-      video = Fabricate(:video)
       review = Fabricate(:review, user: alice, video: video, rating: 1)
       queue_item = Fabricate(:queue_item, user: alice, video: video)
       queue_item.rating = nil

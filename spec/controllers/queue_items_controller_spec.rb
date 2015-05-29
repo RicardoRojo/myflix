@@ -2,10 +2,15 @@ require 'spec_helper'
 
 describe QueueItemsController do
   describe "GET index" do
+
+    it_behaves_like "require user" do
+      let(:action) {get :index}
+    end
+
     context "with user logged in" do
       it "has a @queueitems variable" do
-        current_user = Fabricate(:user)
-        session[:user_id] = current_user.id
+        alice = Fabricate(:user)
+        set_user(alice)
         queue_item = Fabricate(:queue_item, user: current_user)
         queue_item2 = Fabricate(:queue_item, user: current_user)
         get :index
@@ -13,23 +18,20 @@ describe QueueItemsController do
       end
     end
 
-    context "with no user logged in " do
-      it "redirects to root path" do
-        get :index
-        expect(response).to redirect_to root_path
-      end
-    end
   end
 
   describe "POST create" do
+
+    it_behaves_like "require user" do
+      let(:action) {post :create, video_id: 1}
+    end
+
     context "with user logged in" do
 
       let(:user) {Fabricate(:user)}
       let(:monk) {Fabricate(:video, title: "Monk")}
 
-      before do
-        session[:user_id] = user.id
-      end
+      before {set_user(user)}
 
       it "redirects to my queue page" do
         post :create, video_id: monk.id
@@ -56,21 +58,18 @@ describe QueueItemsController do
       end
     end
 
-    context "with no user logged in" do
-
-      it "redirects to the root page" do
-        video = Fabricate(:video)
-        post :create, video_id: video.id
-        expect(response).to redirect_to root_path
-      end
-    end
   end
 
   describe "DELETE destroy" do
+
+    it_behaves_like "require user" do
+      let(:action) {post :destroy, id: 1}
+    end
+
     context "with user logged in" do
 
       let(:user) {Fabricate(:user)}
-      before {session[:user_id] = user.id}
+      before {set_user(user)}
 
       it "redirects to my queue path" do
         queue_item = Fabricate(:queue_item)
@@ -99,20 +98,18 @@ describe QueueItemsController do
       end
     end
 
-    context "with no user logged in" do
-      it "redirects to the root path" do
-        queue_item = Fabricate(:queue_item)
-        delete :destroy, id: queue_item.id
-        expect(response).to redirect_to root_path
-      end
-    end
   end
 
   describe "POST update_queue" do
+
+    it_behaves_like "require user" do
+      let(:action) {post :update_queue, queue_items: [{id: 1, position: 1}]}
+    end
+
     context "with user logged in" do
 
       let(:alice) {Fabricate(:user)}
-      before { session[:user_id] = alice.id }
+      before { set_user(alice) }
       
       context "with valid data" do
         it "redirects to my_queue_path" do
@@ -160,19 +157,14 @@ describe QueueItemsController do
         end
       end
 
-      context "with user different from queue item owner"
+      context "with user different from queue item owner" do
         it "does not modify the item in the queue" do
           bob = Fabricate(:user)
           queue_item = Fabricate(:queue_item, user: bob, position: 1)
           post :update_queue, queue_items: [{id: queue_item.id, position: 2}]
           expect(queue_item.reload.position).to eq(1)
         end
-    end    
-    context "with no user logged in" do
-      it "redirect to root path" do
-        post :update_queue, queue_items: [{id: 1, position: 2}]
-        expect(response).to redirect_to root_path
-      end
+      end 
     end
   end
 

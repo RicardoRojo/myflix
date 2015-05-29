@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   has_many :videos
-  has_many :queue_items, -> {order "position ASC"}
+  has_many :queue_items, -> {order "position"}
   has_secure_password validations: false
   validates :full_name, presence: true
   validates :email, presence: true, email: true, uniqueness: true
@@ -10,5 +10,9 @@ class User < ActiveRecord::Base
     queue_items.each_with_index do |item,index|
       item.update_attributes(position: index+1)
     end    
+  end
+
+  def queued_video?(video)
+    queue_items.find_by(video: video)
   end
 end

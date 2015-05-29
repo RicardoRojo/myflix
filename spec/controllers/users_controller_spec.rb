@@ -6,7 +6,7 @@ describe UsersController do
 
     it "redirects to home if logged in" do
       user = Fabricate(:user)
-      session[:user_id] = user.id
+      set_user(user)
       get :new
       expect(response).to redirect_to home_path
     end

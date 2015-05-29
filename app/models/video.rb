@@ -9,4 +9,5 @@ class Video < ActiveRecord::Base
     return [] if string.empty?
     where("lower(title) LIKE ?", "%#{string.downcase}%").order(created_at: :asc)
   end
+
 end

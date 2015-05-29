@@ -6,7 +6,7 @@ describe SessionsController do
 
     it "redirects to home page if logged in" do
       user = Fabricate(:user)
-      session[:user_id] = user.id
+      set_user(user)
       get :new
       expect(response).to redirect_to home_path
     end
@@ -66,7 +66,7 @@ describe SessionsController do
       let(:user) {Fabricate(:user)}
 
       before do
-        session[:user_id] = user.id
+        set_user(user)
         delete :destroy
       end
 
