@@ -2,10 +2,10 @@ require 'spec_helper'
 
 feature "my queue" do
   scenario "it adds videos to the queue and change their position" do
-    category = Fabricate(:category)
-    monk = Fabricate(:video, category: category)
-    south_park = Fabricate(:video, category: category)
-    futurama = Fabricate(:video, category: category)
+    category    = Fabricate(:category)
+    monk        = Fabricate(:video, category: category)
+    south_park  = Fabricate(:video, category: category)
+    futurama    = Fabricate(:video, category: category)
 
     sign_in
 

@@ -7,7 +7,7 @@ describe Category do
 
   describe "#recent_videos" do
 
-    let(:category) {Fabricate(:category, name: "syfy")}
+    let(:category) {Fabricate(:category)}
 
     it "returns an empty array if no videos found" do
       expect(category.recent_videos).to eq([])
@@ -24,12 +24,11 @@ describe Category do
     end
 
     it "must be ordered by created_at ascending(last video first)" do
-      videos_array = []
-      7.times do |season|
-        video = Fabricate(:video, category: category)
-        videos_array << video
-      end
-      expect(category.recent_videos).to eq(videos_array.reverse.take(6))
+      monk        = Fabricate(:video, category: category)
+      south_park  = Fabricate(:video, category: category)
+      futurama    = Fabricate(:video, category: category)
+     
+      expect(category.recent_videos).to eq [futurama,south_park,monk]
     end
   end
 end

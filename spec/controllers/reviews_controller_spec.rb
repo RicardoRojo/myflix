@@ -18,7 +18,7 @@ describe ReviewsController do
 
       context "with valid input" do
 
-        before { post :create, review: {rating: 4, body: "this is a test"}, video_id: video.id}
+        before { post :create, review: {rating: 4, body: "this is a test"}, video_id: video.id }
 
         it "redirects to the video path" do
           expect(response).to redirect_to video

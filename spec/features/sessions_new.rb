@@ -2,7 +2,7 @@ require 'spec_helper'
 
 feature "User sign in" do
   background do
-    User.create(email: "alice@test.com", password: "12345", full_name: "Alice")
+    Fabricate(:user, email: "alice@test.com", password: "12345")
     visit sign_in_path
     fill_in "email", with: "alice@test.com"
   end
