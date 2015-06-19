@@ -34,10 +34,6 @@ feature "my queue" do
 
   end
 
-  def go_to_video(video)
-    find("a[href='/videos/#{video.id}']").click # looks for the link
-  end
-
   def add_video_to_queue(video)
     visit home_path
     go_to_video(video)
@@ -54,11 +50,4 @@ feature "my queue" do
     expect(find(:xpath, "//tr[contains(.,'#{video.title}')]//input[@type='number']").value).to eq(position.to_s)
   end
 
-  def expect_to_have_text(content)
-    expect(page).to have_content(content)
-  end
-
-  def expect_to_not_have_text(text)
-    expect(page).to_not have_content(text)
-  end
 end

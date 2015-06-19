@@ -21,3 +21,15 @@ def sign_in(user = nil)
   fill_in "password", with: user.password
   find_button("Sign in").click
 end
+
+def go_to_video(video)
+  find("a[href='/videos/#{video.id}']").click # looks for the link
+end
+
+def expect_to_have_text(content)
+  expect(page).to have_content(content)
+end
+
+def expect_to_not_have_text(text)
+  expect(page).to_not have_content(text)
+end
