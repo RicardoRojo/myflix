@@ -5,6 +5,9 @@ describe User do
   it {should validate_presence_of(:email)}
   it {should validate_uniqueness_of(:email)}
   it {should validate_length_of(:password).is_at_least(5).on(:create)}
+  it {should have_many(:reviews)}
+  it {should have_many(:following_relationships).class_name('Relationship').with_foreign_key('follower_id')}
+  it {should have_many(:leading_relationships).class_name('Relationship').with_foreign_key('leader_id')}
 
   it "has to validate email is not correct" do
     user = User.create(full_name: "Bruce Banner", password: "Smash", email: "hulk@test")
