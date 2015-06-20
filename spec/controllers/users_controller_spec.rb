@@ -65,7 +65,7 @@ describe UsersController do
     end
   end
 
-  describe "Get show" do
+  describe "GET show" do
     it_behaves_like "require user" do
       let(:action) {get :show, id: 1}
     end

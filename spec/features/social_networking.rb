@@ -1,15 +1,5 @@
 require 'spec_helper'
 
-# login
-# home
-# click on video
-# click on reviews
-# social page of user
-# follow
-# people includes user
-# unfollow
-# person not in the list
-
 feature "Social networking" do
 
   given(:alice) {Fabricate(:user)}

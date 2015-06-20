@@ -7,7 +7,7 @@
       %li= link_to "My Queue"
       %li= link_to "People", people_path
     .col-md-5.navbar-form
-      = form_tag( "/videos/search", method: "get") do 
+      = form_tag("/videos/search", method: "get") do 
         .form-group
           = text_field_tag :video_title, nil, :placeholder => "Search for videos here", class: "form-control"
           = button_tag "search", class: "btn btn-default"
