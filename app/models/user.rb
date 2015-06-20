@@ -23,11 +23,11 @@ class User < ActiveRecord::Base
     following_relationships.map(&:leader).include?(leader)
   end
 
-  def is_the?(role)
+  def has_role?(role)
     self == role
   end
 
   def not_followable?(user)
-    self.already_followed?(user) || self.is_the?(user)
+    already_followed?(user) || has_role?(user)
   end
 end

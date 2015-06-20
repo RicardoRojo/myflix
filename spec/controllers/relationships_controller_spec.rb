@@ -25,9 +25,7 @@ describe RelationshipsController do
     let(:bob) {Fabricate(:user)}
     let(:charlie) {Fabricate(:user)}
 
-    before do
-      set_user(alice)
-    end
+    before { set_user(alice) }
     
     it "redirects to people page" do
       relationship = Fabricate(:relationship, leader: bob, follower: alice)
@@ -56,7 +54,7 @@ describe RelationshipsController do
     let(:alice) {Fabricate(:user)}
     let(:bob) {Fabricate(:user)}
 
-    before { set_user(alice)}
+    before { set_user(alice) }
     
     it "redirects to people path" do
       post :create, leader_id: bob.id
