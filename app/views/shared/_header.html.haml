@@ -5,7 +5,7 @@
     %ul.col-md-4.clearfix
       %li= link_to "Videos"
       %li= link_to "My Queue"
-      %li= link_to "People"
+      %li= link_to "People", people_path
     .col-md-5.navbar-form
       = form_tag( "/videos/search", method: "get") do 
         .form-group
