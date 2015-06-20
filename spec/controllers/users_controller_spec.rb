@@ -44,8 +44,8 @@ describe UsersController do
       end
 
     end
-    context "with invalid information" do
 
+    context "with invalid information" do
       before do
         user = Fabricate.build(:user)
         post :create, user: {password: user.password, full_name: user.full_name}
@@ -61,6 +61,27 @@ describe UsersController do
 
       it "renders new template" do
         expect(response).to render_template(:new)
+      end
+    end
+
+    context "test mailer" do
+      let(:alice) {Fabricate.build(:user)}
+
+      after { ActionMailer::Base.deliveries.clear }
+
+      it "sends the email to the right recipient with valid data" do
+        post :create, user: {email: alice.email, password: alice.password, full_name: alice.full_name}
+        expect(ActionMailer::Base.deliveries.last.to).to eq([alice.email])
+      end
+
+      it "has valid content in the body with valid data" do
+        post :create, user: {email: alice.email, password: alice.password, full_name: alice.full_name}
+        expect(ActionMailer::Base.deliveries.last.body).to include(alice.full_name.capitalize)
+      end
+
+      it "does not send the email if data is invalid" do
+        post :create, user: {email: alice.email}
+        expect(ActionMailer::Base.deliveries.count).to eq(0)
       end
     end
   end
