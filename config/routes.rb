@@ -7,8 +7,13 @@ Myflix::Application.routes.draw do
   delete '/sign_out', to: "sessions#destroy"
   get '/my_queue', to: "queue_items#index", as: "my_queue"
   post '/update_queue', to: "queue_items#update_queue", as: "update_queue"
-
   get '/people', to: "relationships#index"
+  get '/forgot_password', to: "forgot_passwords#new"
+  get '/confirm_password_reset', to: "forgot_passwords#confirm"
+  get '/expired_token', to: "reset_passwords#expired_token"
+
+  resources :reset_passwords, only: [:show, :create]
+  resources :forgot_passwords, only: [:create]
   resources :users, only: [:show,:create]
   resources :videos do
     collection do

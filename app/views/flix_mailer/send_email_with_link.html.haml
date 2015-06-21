@@ -1,0 +1,4 @@
+%html
+  %body
+    %p We have received a password change request. To change your password follow the link below.
+    %p= link_to "Change my email", reset_password_url(@user.token)

@@ -30,4 +30,8 @@ class User < ActiveRecord::Base
   def not_followable?(user)
     already_followed?(user) || has_role?(user)
   end
+
+  def generate_token
+    update_attribute(:token, SecureRandom.urlsafe_base64)
+  end
 end
