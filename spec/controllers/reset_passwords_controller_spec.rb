@@ -42,6 +42,7 @@ describe ResetPasswordsController do
       it "deletes user token" do
         expect(alice.reload.token).to be_nil
       end
+
     end
 
     context "with invalid token" do
@@ -53,6 +54,29 @@ describe ResetPasswordsController do
       it "redirect to root path if token is empty" do
         post :create, password: "12345", token: "1111"
         expect(response).to redirect_to expired_token_path
+      end
+    end
+
+    context "with invalid password" do
+
+      let(:alice) {Fabricate(:user, password: "12345", token: "12345")}
+      before {post :create, password: "", token: alice.token}
+
+      it "renders show template" do
+        expect(response).to render_template(:show)
+      end
+
+      it "shows an error message" do
+        expect(flash[:error]).to eq("Wrong password. Try again!!")
+      end
+
+      it "does not update the password" do
+        alice_old_password = alice.password
+        expect(alice.reload.password).to eq(alice_old_password)
+      end
+
+      it "assigns @token for show template" do
+        expect(assigns(:token)).to eq(alice.token)
       end
     end
   end

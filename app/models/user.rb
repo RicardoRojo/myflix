@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   has_secure_password validations: false
   validates :full_name, presence: true
   validates :email, presence: true, email: true, uniqueness: true
-  validates :password, presence: true, length: {minimum: 5}, on: :create
+  validates :password, presence: true, length: {minimum: 5}
   has_many :reviews
   has_many :following_relationships, class_name: "Relationship", foreign_key: :follower_id
   has_many :leading_relationships, class_name: "Relationship", foreign_key: :leader_id

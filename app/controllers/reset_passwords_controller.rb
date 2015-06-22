@@ -1,4 +1,5 @@
 class ResetPasswordsController < ApplicationController
+  rescue_from ActiveRecord::RecordInvalid, with: :password_invalid
   def show
     user = User.find_by(token: params[:id])
     if user
@@ -20,5 +21,14 @@ class ResetPasswordsController < ApplicationController
     else
       redirect_to expired_token_path
     end
+  end
+
+  protected
+
+  def password_invalid
+    @token = params[:token]
+    flash[:error] = "Wrong password. Try again!!"
+    render :show
+    return
   end
 end
