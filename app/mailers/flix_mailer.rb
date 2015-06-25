@@ -10,4 +10,9 @@ class FlixMailer < ActionMailer::Base
     @user = user
     mail to: user.email, subject: "Reset password link"
   end
+
+  def send_invitation_with_link(invitation)
+    @invitation = invitation
+    mail to: invitation.recipient_email, subject: "My flix invitation"
+  end
 end

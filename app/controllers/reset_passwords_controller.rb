@@ -29,6 +29,5 @@ class ResetPasswordsController < ApplicationController
     @token = params[:token]
     flash[:error] = "Wrong password. Try again!!"
     render :show
-    return
   end
 end

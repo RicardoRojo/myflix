@@ -21,16 +21,46 @@ describe User do
 
   describe "#queued?" do
     it "returns true if the video has queue items" do
-      video = Fabricate(:video)
-      user = Fabricate(:user)
-      queue_item = Fabricate(:queue_item, video: video, user: user)
+      video       = Fabricate(:video)
+      user        = Fabricate(:user)
+      queue_item  = Fabricate(:queue_item, video: video, user: user)
       expect(user.queued_video?(video)).to be_truthy
     end
 
     it "retuns false if the video has not queue items" do
       video = Fabricate(:video)
-      user = Fabricate(:user)
+      user  = Fabricate(:user)
       expect(user.queued_video?(video)).to be_falsy
+    end
+  end
+
+  describe "#follows?" do
+    it "returns true if the user follows the leader" do
+      alice = Fabricate(:user)
+      bob   = Fabricate(:user)
+      Fabricate(:relationship, leader: alice, follower: bob)
+      expect(bob.follows?(alice)).to be_truthy
+    end
+
+    it "returns false if the user does not follow the leader" do
+      alice = Fabricate(:user)
+      bob   = Fabricate(:user)
+      expect(bob.follows?(alice)).to be_falsy
+    end
+  end
+
+  describe "#follow" do
+    it "follows the leader" do
+      alice = Fabricate(:user)
+      bob   = Fabricate(:user)
+      alice.follow(bob)
+      expect(alice.reload.follows?(bob)).to be_truthy
+    end
+
+    it "does not follow herself" do
+      alice = Fabricate(:user)
+      alice.follow(alice)
+      expect(alice.reload.follows?(alice)).to be_falsy
     end
   end
 end

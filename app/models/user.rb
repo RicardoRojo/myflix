@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
     queue_items.find_by(video: video)
   end
 
-  def already_followed?(leader)
+  def follows?(leader)
     following_relationships.map(&:leader).include?(leader)
   end
 
@@ -28,10 +28,14 @@ class User < ActiveRecord::Base
   end
 
   def not_followable?(user)
-    already_followed?(user) || has_role?(user)
+    follows?(user) || has_role?(user)
   end
 
   def generate_token
     update_attribute(:token, SecureRandom.urlsafe_base64)
+  end
+
+  def follow(user)
+    Relationship.create(leader: user, follower: self) unless not_followable?(user)
   end
 end
