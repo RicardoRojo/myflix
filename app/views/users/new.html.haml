@@ -12,5 +12,3 @@
           %fieldset.actions.control-group.col-sm-offset-2
             .controls
               = f.submit "Sign Up"
-              = link_to "register with token", register_with_token_path(Invitation.first.token)
-              %p Email #{Invitation.first.recipient_email}
