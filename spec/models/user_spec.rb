@@ -9,6 +9,10 @@ describe User do
   it {should have_many(:following_relationships).class_name('Relationship').with_foreign_key('follower_id')}
   it {should have_many(:leading_relationships).class_name('Relationship').with_foreign_key('leader_id')}
 
+  it_behaves_like "tokenable" do
+    let(:object) {Fabricate(:user)}
+  end
+
   it "has to validate email is not correct" do
     user = User.create(full_name: "Bruce Banner", password: "Smash", email: "hulk@test")
     expect(user.errors.messages.any?).to eq(true)

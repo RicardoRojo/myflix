@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  include Tokenable
   has_many :videos
   has_many :queue_items, -> {order "position"}
   has_secure_password validations: false
@@ -29,10 +30,6 @@ class User < ActiveRecord::Base
 
   def not_followable?(user)
     follows?(user) || has_role?(user)
-  end
-
-  def generate_token
-    update_attribute(:token, SecureRandom.urlsafe_base64)
   end
 
   def follow(user)
