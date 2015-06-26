@@ -45,7 +45,7 @@ class UsersController < ApplicationController
     if invitation
       @user.follow(invitation.inviter)
       invitation.inviter.follow(@user)
-      invitation.update!(token: nil)
+      invitation.remove_token!
     end
   end
 end
