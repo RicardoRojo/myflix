@@ -12,7 +12,7 @@
       - @relationships.each do |relationship|
         %tr
           %td
-            = image_tag(user_gravatar(@user))
+            = image_tag(user_gravatar(relationship.follower))
             = link_to relationship.leader.full_name, relationship.leader
           %td.extra-padding #{relationship.leader.queue_items.count}
           %td.extra-padding #{relationship.leader.leading_relationships.count}

@@ -1,10 +1,11 @@
 class User < ActiveRecord::Base
+  include Tokenable
   has_many :videos
   has_many :queue_items, -> {order "position"}
   has_secure_password validations: false
   validates :full_name, presence: true
   validates :email, presence: true, email: true, uniqueness: true
-  validates :password, presence: true, length: {minimum: 5}, on: :create
+  validates :password, presence: true, length: {minimum: 5}
   has_many :reviews
   has_many :following_relationships, class_name: "Relationship", foreign_key: :follower_id
   has_many :leading_relationships, class_name: "Relationship", foreign_key: :leader_id
@@ -19,7 +20,7 @@ class User < ActiveRecord::Base
     queue_items.find_by(video: video)
   end
 
-  def already_followed?(leader)
+  def follows?(leader)
     following_relationships.map(&:leader).include?(leader)
   end
 
@@ -28,6 +29,10 @@ class User < ActiveRecord::Base
   end
 
   def not_followable?(user)
-    already_followed?(user) || has_role?(user)
+    follows?(user) || has_role?(user)
+  end
+
+  def follow(user)
+    Relationship.create(leader: user, follower: self) unless not_followable?(user)
   end
 end

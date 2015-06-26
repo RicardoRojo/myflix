@@ -1,0 +1,5 @@
+%html
+  %body
+    %p Hello #{@invitation.recipient_name}, #{@invitation.inviter.full_name} has invited to join MyFlix
+    %p #{@invitation.message}
+    = link_to "Join my flix", register_with_token_url(@invitation.token)

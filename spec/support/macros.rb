@@ -33,3 +33,7 @@ end
 def expect_to_not_have_text(text)
   expect(page).to_not have_content(text)
 end
+
+def sign_out
+  click_link "Sign Out"
+end

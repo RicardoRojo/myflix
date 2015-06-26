@@ -16,8 +16,8 @@ gem 'faker'
 
 group :development do
   gem 'thin'
-  gem "better_errors"
-  gem "binding_of_caller"
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 group :development, :test do
@@ -30,6 +30,7 @@ group :test do
   gem 'database_cleaner', '1.2.0'
   gem 'shoulda-matchers'
   gem 'capybara'
+  gem 'capybara-email'
 end
 
 group :production do

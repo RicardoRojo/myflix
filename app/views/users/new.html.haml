@@ -8,6 +8,9 @@
           = f.email_field :email
           = f.password_field :password
           = f.text_field :full_name, label: "Full name"
+          = hidden_field_tag :invitation_token, @invitation_token
           %fieldset.actions.control-group.col-sm-offset-2
             .controls
               = f.submit "Sign Up"
+              = link_to "register with token", register_with_token_path(Invitation.first.token)
+              %p Email #{Invitation.first.recipient_email}
