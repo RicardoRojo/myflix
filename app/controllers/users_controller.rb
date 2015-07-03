@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     if @user.save
       session[:user_id] = @user.id
       flash[:success] = "Welcome #{@user.full_name}!!"
-      FlixMailer.send_welcome_email(@user).deliver
+      FlixMailer.delay.send_welcome_email(@user.id)
       handle_invitation
       redirect_to home_path
     else

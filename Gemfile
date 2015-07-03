@@ -13,6 +13,11 @@ gem 'pg'
 gem 'bcrypt-ruby'
 gem 'fabrication'
 gem 'faker'
+gem 'sidekiq'
+gem 'sinatra', require: false
+gem 'slim'
+gem 'unicorn'
+gem "sentry-raven" #, :github => "getsentry/raven-ruby"
 
 group :development do
   gem 'thin'

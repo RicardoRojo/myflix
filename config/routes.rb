@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Myflix::Application.routes.draw do
   root "pages#front"
   get '/home', to: 'videos#index'
@@ -12,7 +14,9 @@ Myflix::Application.routes.draw do
   get '/confirm_password_reset', to: "forgot_passwords#confirm"
   get '/expired_token', to: "reset_passwords#expired_token"
   get 'register/:token', to: "users#new_with_token", as: "register_with_token"
-  
+  # sidekiq console
+  mount Sidekiq::Web, at: "/sidekiq"
+  #
   resources :invitations, only: [:new,:create]
   resources :reset_passwords, only: [:show, :create]
   resources :forgot_passwords, only: [:create]
