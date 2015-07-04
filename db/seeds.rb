@@ -19,6 +19,7 @@ number_of_records.times do |number|
 end
 
 Fabricate.times(5,:user,password: "12345")
+User.create!(full_name: "Administrator", email: "admin@myflix.com", password: "12345")
 
 number_of_reviews = 20
 
