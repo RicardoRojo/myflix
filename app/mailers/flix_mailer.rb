@@ -12,7 +12,6 @@ class FlixMailer < ActionMailer::Base
   end
 
   def send_invitation_with_link(invitation_id)
-    i = 1/0
     @invitation = Invitation.first
     mail to: @invitation.recipient_email, subject: "My flix invitation"
   end
