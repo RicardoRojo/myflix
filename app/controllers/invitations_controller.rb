@@ -10,7 +10,7 @@ class InvitationsController < ApplicationController
     if @invitation.save
       flash[:success] = "Invitation has been sent"
       @invitation.generate_token
-      FlixMailer.send_invitation_with_link(@invitation).deliver
+      FlixMailer.delay.send_invitation_with_link(@invitation.id)
       redirect_to new_invitation_path
     else
       flash[:error] = "You are missing any of the fields"
