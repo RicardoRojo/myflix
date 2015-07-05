@@ -4,7 +4,7 @@ class ForgotPasswordsController < ApplicationController
     user = User.find_by(email: params[:email])
     if user
       user.generate_token
-      FlixMailer.delay.send_email_with_link(user.id)
+      FlixMailer.delay_for(5.seconds).send_email_with_link(user.id)
       redirect_to confirm_password_reset_path
     else
       flash[:error] = params[:email].blank? ? "Email cant be blank" :
