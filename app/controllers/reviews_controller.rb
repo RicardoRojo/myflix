@@ -1,5 +1,5 @@
-class ReviewsController < ApplicationController
-  before_action :require_user
+class ReviewsController < AuthenticatedController
+  
   def create
     @video = Video.find(params[:video_id])
     review = @video.reviews.build(review_params.merge!(user: current_user))

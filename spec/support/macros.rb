@@ -37,3 +37,7 @@ end
 def sign_out
   click_link "Sign Out"
 end
+
+def set_admin(admin=nil)
+  session[:user_id] = (admin || Fabricate(:admin)).id
+end

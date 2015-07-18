@@ -45,7 +45,7 @@ describe VideosController do
 
       it "is assigned @videos" do
         my_video = Fabricate(:video)
-        get :search, video_title: my_video.title.downcase.first(3)
+        get :search, video: my_video.title.downcase.first(3)
         expect(assigns(:videos)).to include(my_video)
       end
     end
