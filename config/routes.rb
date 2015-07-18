@@ -17,6 +17,9 @@ Myflix::Application.routes.draw do
   # sidekiq console
   mount Sidekiq::Web, at: "/sidekiq"
   #
+  namespace :admin do
+    resources :videos, only: [:new, :create]
+  end
   resources :invitations, only: [:new,:create]
   resources :reset_passwords, only: [:show, :create]
   resources :forgot_passwords, only: [:create]

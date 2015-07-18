@@ -18,3 +18,11 @@ shared_examples "tokenable" do
     expect(object.token).not_to be_nil
   end
 end
+shared_examples "require admin" do
+  it "redirects to root path" do
+    set_user
+    action
+    expect(response).to redirect_to home_path
+    expect(flash[:error]).to be_present
+  end
+end

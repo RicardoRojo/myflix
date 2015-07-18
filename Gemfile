@@ -18,6 +18,9 @@ gem 'sinatra', require: false
 gem 'slim'
 gem 'unicorn'
 gem "sentry-raven" #, :github => "getsentry/raven-ruby"
+gem 'carrierwave'
+gem 'mini_magick'
+gem 'carrierwave-aws'
 
 group :development do
   gem 'thin'
