@@ -12,7 +12,9 @@ class UsersController < ApplicationController
       session[:user_id] = @user.id
       flash[:success] = "Welcome #{@user.full_name}!!"
       FlixMailer.delay.send_welcome_email(@user.id)
+      binding.pry
       handle_invitation
+      charge_stripe
       redirect_to home_path
     else
       render :new
@@ -46,6 +48,23 @@ class UsersController < ApplicationController
       @user.follow(invitation.inviter)
       invitation.inviter.follow(@user)
       invitation.remove_token!
+    end
+  end
+
+  def charge_stripe
+
+    Stripe.api_key = ENV['stripe_api_key']
+    token = params[:stripeToken]
+
+    begin
+      charge = Stripe::Charge.create(
+        :amount => 999, # amount in cents, again
+        :currency => "eur",
+        :source => token,
+        :description => "Example charge"
+      )
+    rescue Stripe::CardError => e
+      # The card has been declined
     end
   end
 end
