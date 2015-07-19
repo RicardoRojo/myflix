@@ -12,7 +12,6 @@ class UsersController < ApplicationController
       session[:user_id] = @user.id
       flash[:success] = "Welcome #{@user.full_name}!!"
       FlixMailer.delay.send_welcome_email(@user.id)
-      binding.pry
       handle_invitation
       charge_stripe
       redirect_to home_path
