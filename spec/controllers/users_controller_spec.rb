@@ -20,18 +20,22 @@ describe UsersController do
 
   describe "POST create" do
 
-    context "with valid information" do
+    context "successful user signup" do
 
       let(:alice) {Fabricate.build(:user)}
 
-      it "creates the user" do
-        post :create, user: {email: alice.email, password: alice.password, full_name: alice.full_name}
-        expect(User.count).to be(1)
+      before do
+        result = double(successful?: true)
+        UserSignup.any_instance.should_receive(:signup).and_return(result)
       end
-
+      
       it "sets the session" do
-        post :create, user: {email: alice.email, password: alice.password, full_name: alice.full_name}
-        expect(session[:user_id]).to eq(User.last.id)
+        user = double("user")
+        id = double("id")
+        user.stub(:id).and_return(id)
+        User.stub(:last).and_return(user)
+        post :create, user: {email: alice.email, password: alice.password, full_name: alice.full_name,id: 1}
+        expect(session[:user_id]).to eq(1)
       end
 
       it "has a flash success" do
@@ -44,40 +48,20 @@ describe UsersController do
         expect(response).to redirect_to home_path
       end
 
-      context "with invitation" do
-
-        let(:bob)         {Fabricate(:user)}
-        let(:invitation)  {Fabricate(:invitation, recipient_email: "charles@test.com", inviter: bob)}
-        let(:charles)     {User.find_by(email: "charles@test.com")}
-
-        before do
-          post :create, user: { email: invitation.recipient_email, 
-                                password: "12345", 
-                                full_name: "charles" }, invitation_token: invitation.token
-        end
-
-        it "the invited user follows the inviter" do
-          expect(charles.follows?(bob)).to be_truthy
-        end
-
-        it "the inviter user follows the invited user" do
-          expect(bob.follows?(charles)).to be_truthy
-        end
-
-        it "removes the token of the invitation to avoid multiple registrations with one token" do
-          expect(invitation.reload.token).to be_nil
-        end
-      end
     end
 
-    context "with invalid information" do
+    context "with unsuccesful user login" do
+
+      let(:charge) {double(:charge, successful?: false, error_message: "Your card was declined")}
+
       before do
+        StripeWrapper::Charge.stub(:create).and_return(charge)
         user = Fabricate.build(:user)
-        post :create, user: {password: user.password, full_name: user.full_name}
+        post :create, user: {email: user.email, password: user.password, full_name: user.full_name}, stripeToken: "12345"
       end
 
-      it "does not create a record" do
-        expect(User.count).to be(0)
+      it "shows a flash message" do
+        expect(flash[:error]).to be_present
       end
 
       it "does not set session" do
@@ -86,27 +70,6 @@ describe UsersController do
 
       it "renders new template" do
         expect(response).to render_template(:new)
-      end
-    end
-
-    context "test mailer" do
-      let(:alice) {Fabricate.build(:user)}
-
-      before { ActionMailer::Base.deliveries.clear }
-
-      it "sends the email to the right recipient with valid data" do
-        post :create, user: {email: alice.email, password: alice.password, full_name: alice.full_name}
-        expect(ActionMailer::Base.deliveries.last.to).to eq([alice.email])
-      end
-
-      it "has valid content in the body with valid data" do
-        post :create, user: {email: alice.email, password: alice.password, full_name: alice.full_name}
-        expect(ActionMailer::Base.deliveries.last.body).to include(alice.full_name.capitalize)
-      end
-
-      it "does not send the email if data is invalid" do
-        post :create, user: {email: alice.email}
-        expect(ActionMailer::Base.deliveries.count).to eq(0)
       end
     end
   end

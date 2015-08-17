@@ -23,6 +23,7 @@ gem 'mini_magick'
 gem 'carrierwave-aws'
 gem 'stripe'
 gem 'figaro'
+gem 'draper'
 
 group :development do
   gem 'thin'
@@ -41,6 +42,9 @@ group :test do
   gem 'shoulda-matchers'
   gem 'capybara'
   gem 'capybara-email'
+  gem 'vcr'
+  gem 'webmock'
+  gem 'poltergeist'
 end
 
 group :production do

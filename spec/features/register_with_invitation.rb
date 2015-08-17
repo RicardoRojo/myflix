@@ -1,27 +1,34 @@
 require 'spec_helper'
 
 feature "invite and register with token" do
-  scenario "invites a user" do
+  scenario "invites a user", { js: true, vcr: true } do
     clear_emails
     
     alice = Fabricate(:user)
     bob   = Fabricate.build(:user)
     sign_in(alice)
 
-    click_link "Invite friends"
+    click_link "Welcome #{alice.full_name}"
+    find_link("Invite").trigger('click')
+
     expect_to_have_text("Invite a friend to join MyFlix!")
 
     send_invitation(bob,"Join MyFlix, it´s great")
+
+    click_link "Welcome #{alice.full_name}"
     sign_out
 
     open_email(bob.email)
     expect_email("Join MyFlix, it´s great")
     
     click_email_link_and_signup(bob)
+    sleep 3
     expect_to_have_text("Welcome #{bob.full_name}")
 
     expect_following(alice)
 
+    click_link "Welcome #{bob.full_name}"
+    save_screenshot('tmp/bob_signup.png')
     sign_out
 
     click_email_link_and_expect_expired_link_page
@@ -48,6 +55,10 @@ feature "invite and register with token" do
     expect(find_field('Email').value).to eq(user.email)
     fill_in "Password", with: user.password
     fill_in "Full name", with: user.full_name
+    fill_in "Credit Card Number", with: "4242424242424242"
+    fill_in "Security Code", with: "123"
+    select "7 - July", from: "date_month"
+    select "2017", from: "date_year"
     click_button "Sign Up"
   end
 

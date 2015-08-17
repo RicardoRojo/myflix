@@ -149,10 +149,10 @@ describe QueueItemsController do
           expect(flash[:error]).to be_present
         end
 
-        it "does not update the data" do
+        it "does not update the data" , js: true do
           queue_item = Fabricate(:queue_item, user: alice, position: 1)
           queue_item2 = Fabricate(:queue_item, user: alice, position: 2)
-          post :update_queue, queue_items: [{id: queue_item.id, position: 3} , {id: queue_item.id, position: 2.4}]
+          post :update_queue, queue_items: [{id: queue_item.id, position: 3},{id: queue_item.id, position: 2.4}]
           expect(queue_item.reload.position).to eq(1)
         end
       end
