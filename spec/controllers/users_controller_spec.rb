@@ -30,12 +30,9 @@ describe UsersController do
       end
       
       it "sets the session" do
-        user = double("user")
-        id = double("id")
-        user.stub(:id).and_return(id)
-        User.stub(:last).and_return(user)
-        post :create, user: {email: alice.email, password: alice.password, full_name: alice.full_name,id: 1}
-        expect(session[:user_id]).to eq(1)
+        signup = double('signup', user: alice, successful?: true)
+        post :create, user: {email: alice.email, password: alice.password, full_name: alice.full_name}
+        expect(session[:user_id]).to eq(alice.id)
       end
 
       it "has a flash success" do
