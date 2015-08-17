@@ -16,3 +16,6 @@
 /config/database.yml
 /redis-stable/**
 /public/uploads/**
+
+# Ignore application configuration
+/config/application.yml

@@ -28,7 +28,6 @@ class QueueItemsController < AuthenticatedController
     redirect_to my_queue_path
   end
 
-  private
 
   def add_item_to_queue(video)
     QueueItem.create!(video: video, user: current_user, position: current_user.queue_items.count + 1)

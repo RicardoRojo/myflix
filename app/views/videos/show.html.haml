@@ -6,7 +6,8 @@
       .video_info.col-sm-3
         %header
           %h3= @video.title
-          %span Rating: #{@video.reviews.average(:rating).to_f.round(1)}/5.0
+          %span Rating:
+          = @video.rating
         %p= @video.description
         .actions
           = link_to "Watch Now", @video.video_url.to_s, class: "btn btn-primary"
