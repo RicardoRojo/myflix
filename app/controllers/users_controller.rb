@@ -8,8 +8,7 @@ class UsersController < ApplicationController
   
   def create
     @user = User.new(user_params)
-    result = UserSignup.new(@user).signup(params[:stripe_token],params[:invitation_token])
-
+    result = UserSignup.new(@user).signup(params[:stripeToken],params[:invitation_token])
     if result.successful?
       flash[:success] = "Welcome #{@user.full_name}!!"
       session[:user_id] = @user.id
