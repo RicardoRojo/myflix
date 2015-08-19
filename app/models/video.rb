@@ -7,10 +7,13 @@ class Video < ActiveRecord::Base
 
   mount_uploader :large_cover, LargeCoverUploader
   mount_uploader :small_cover, SmallCoverUploader
-  
+
+  def rating
+    reviews.average(:rating).round(1) if reviews.average(:rating)
+  end
+
   def self.search_by_title(string)
     return [] if string.empty?
     where("lower(title) LIKE ?", "%#{string.downcase}%").order(created_at: :asc)
   end
-
 end
