@@ -8,6 +8,7 @@ module StripeWrapper
 
     def self.create(options={})
       begin
+        binding.pry
         response = Stripe::Charge.create(
                     amount: options[:amount],
                     currency: options[:currency],

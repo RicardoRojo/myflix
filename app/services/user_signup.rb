@@ -8,6 +8,7 @@ class UserSignup
   def signup(stripe_token, invitation_token)
     if @user.valid?
       token = stripe_token
+      binding.pry
       charge = StripeWrapper::Charge.create(
         :amount => 999, # amount in cents, again
         :currency => "eur",
