@@ -16,9 +16,11 @@ Myflix::Application.routes.draw do
   get 'register/:token', to: "users#new_with_token", as: "register_with_token"
   # sidekiq console
   mount Sidekiq::Web, at: "/sidekiq"
+  mount StripeEvent::Engine, at: '/stripe_events' # provide a custom path
   #
   namespace :admin do
     resources :videos, only: [:new, :create]
+    resources :payments, only: :index
   end
   resources :invitations, only: [:new,:create]
   resources :reset_passwords, only: [:show, :create]

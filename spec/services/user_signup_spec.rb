@@ -5,7 +5,7 @@ describe UserSignup do
     context "with valid personal information and valid card" do
 
       let(:alice) {Fabricate.build(:user)}
-      let(:customer) {double(:customer, successful?: true)}
+      let(:customer) {double(:customer, successful?: true, customer_token: "abcdedf")}
 
       before do
         StripeWrapper::Customer.should_receive(:create).and_return(customer)
@@ -28,12 +28,16 @@ describe UserSignup do
         expect(ActionMailer::Base.deliveries.last.body).to include(alice.full_name.capitalize)
       end
 
+      it "adds stripe customer id to user" do
+        expect(User.first.customer_token).to eq("abcdedf")
+      end
+
       context "with invitation" do
 
         let(:bob)         {Fabricate(:user)}
         let(:charles)     {Fabricate.build(:user, email: "charles@test.com")}
         let(:invitation)  {Fabricate(:invitation, recipient_email: "charles@test.com", inviter: bob)}
-        let(:customer)    {double(:customer, successful?: true)}
+        let(:customer)    {double(:customer, successful?: true, customer_token: "abcdedf")}
 
 
         before do

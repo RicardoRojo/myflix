@@ -14,6 +14,7 @@ class UserSignup
         :email => @user
       )
       if customer.successful?
+        @user.customer_token = customer.customer_token
         @user.save
         FlixMailer.delay.send_welcome_email(@user.id)
         handle_invitation(invitation_token)
