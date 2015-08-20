@@ -5,10 +5,10 @@ describe UserSignup do
     context "with valid personal information and valid card" do
 
       let(:alice) {Fabricate.build(:user)}
-      let(:charge) {double(:charge, successful?: true)}
+      let(:customer) {double(:customer, successful?: true)}
 
       before do
-        StripeWrapper::Charge.should_receive(:create).and_return(charge)
+        StripeWrapper::Customer.should_receive(:create).and_return(customer)
         UserSignup.new(alice).signup("any_token",nil)
       end
 
@@ -33,11 +33,11 @@ describe UserSignup do
         let(:bob)         {Fabricate(:user)}
         let(:charles)     {Fabricate.build(:user, email: "charles@test.com")}
         let(:invitation)  {Fabricate(:invitation, recipient_email: "charles@test.com", inviter: bob)}
-        let(:charge)      {double(:charge, successful?: true)}
+        let(:customer)    {double(:customer, successful?: true)}
 
 
         before do
-          StripeWrapper::Charge.should_receive(:create).and_return(charge)
+          StripeWrapper::Customer.should_receive(:create).and_return(customer)
           UserSignup.new(charles).signup("any_token",invitation.token)
         end
 
@@ -57,10 +57,10 @@ describe UserSignup do
 
     context "with valid personal info and declined card" do
 
-      let(:charge) {double(:charge, successful?: false, error_message: "Your card was declined")}
+      let(:customer) {double(:customer, successful?: false, error_message: "Your card was declined")}
 
       before do
-        StripeWrapper::Charge.stub(:create).and_return(charge)
+        StripeWrapper::Customer.stub(:create).and_return(customer)
         user = Fabricate.build(:user)
         UserSignup.new(user).signup("fake_stripe_token",nil)
       end
@@ -77,8 +77,8 @@ describe UserSignup do
 
     context "with invalid personal information" do
 
-      let(:alice) {Fabricate.build(:user)}
-      let(:charge) {double(:charge, successful?: false, error_message: "Your card was declined")}
+      let(:alice)     {Fabricate.build(:user)}
+      let(:customer)  {double(:customer, successful?: false, error_message: "Your card was declined")}
 
 
       before do
@@ -98,7 +98,7 @@ describe UserSignup do
       end
 
       it "does not try to charge the credit card" do
-        StripeWrapper::Charge.should_not_receive(:create)
+        StripeWrapper::Customer.should_not_receive(:create)
       end
     end
   end
