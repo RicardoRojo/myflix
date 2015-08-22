@@ -1,0 +1,5 @@
+.col-md-3.navbar-form
+  = form_tag("/videos/advanced_search", method: "get") do 
+    .form-group
+      = text_field_tag :query, nil, :placeholder => "Search for videos here", class: "form-control"
+      = button_tag "Advanced Search", class: "btn btn-default"

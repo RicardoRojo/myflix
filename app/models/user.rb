@@ -35,4 +35,8 @@ class User < ActiveRecord::Base
   def follow(user)
     Relationship.create(leader: user, follower: self) unless not_followable?(user)
   end
+
+  def deactivate!
+    update_column(:active, false)
+  end
 end
