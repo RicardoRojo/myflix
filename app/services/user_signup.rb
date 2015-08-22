@@ -8,13 +8,13 @@ class UserSignup
   def signup(stripe_token, invitation_token)
     if @user.valid?
       token = stripe_token
-      charge = StripeWrapper::Charge.create(
-        :amount => 999, # amount in cents, again
-        :currency => "eur",
+      customer = StripeWrapper::Customer.create(
+        :plan => "basic", # amount in cents, again
         :source => token,
-        :description => "Example charge"
+        :email => @user
       )
-      if charge.successful?
+      if customer.successful?
+        @user.customer_token = customer.customer_token
         @user.save
         FlixMailer.delay.send_welcome_email(@user.id)
         handle_invitation(invitation_token)
@@ -22,7 +22,7 @@ class UserSignup
         self
       else
         @status = :failed
-        @error_message = charge.error_message
+        @error_message = customer.error_message
         self
       end
     else

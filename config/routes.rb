@@ -16,9 +16,11 @@ Myflix::Application.routes.draw do
   get 'register/:token', to: "users#new_with_token", as: "register_with_token"
   # sidekiq console
   mount Sidekiq::Web, at: "/sidekiq"
+  mount StripeEvent::Engine, at: '/stripe_events' # provide a custom path
   #
   namespace :admin do
     resources :videos, only: [:new, :create]
+    resources :payments, only: :index
   end
   resources :invitations, only: [:new,:create]
   resources :reset_passwords, only: [:show, :create]
@@ -27,6 +29,7 @@ Myflix::Application.routes.draw do
   resources :videos do
     collection do
       get "/search", to: "videos#search"
+      get :advanced_search, to: "videos#advanced_search", as: :advanced_search
     end
     resources :reviews, only: [:create]
   end

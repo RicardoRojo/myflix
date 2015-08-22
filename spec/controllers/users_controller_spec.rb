@@ -49,10 +49,10 @@ describe UsersController do
 
     context "with unsuccesful user login" do
 
-      let(:charge) {double(:charge, successful?: false, error_message: "Your card was declined")}
+      let(:customer) {double(:customer, successful?: false, error_message: "Your card was declined")}
 
       before do
-        StripeWrapper::Charge.stub(:create).and_return(charge)
+        StripeWrapper::Customer.stub(:create).and_return(customer)
         user = Fabricate.build(:user)
         post :create, user: {email: user.email, password: user.password, full_name: user.full_name}, stripeToken: "12345"
       end

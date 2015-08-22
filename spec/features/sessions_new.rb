@@ -18,4 +18,11 @@ feature "User sign in" do
     click_button "Sign in"
     expect(page).to have_content "Invalid user or password.Please try again"
   end
+
+  scenario "with user deactivated it does not sign in user" do
+    alice = Fabricate(:user, active: false)
+    sign_in(alice)
+    expect(page).to have_content "The user is disabled, Please contact customer service"
+    expect(page).not_to have_content alice.full_name
+  end
 end
